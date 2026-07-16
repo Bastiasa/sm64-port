@@ -6,7 +6,7 @@ typedef struct {
 
 typedef struct {
     char *key;
-    void (*value)(struct CommandData *data);
+    void (*value)(CommandData *data);
 } ListenerEntry;
 
 void registerListener(char *command, void (*listener)(CommandData *data));

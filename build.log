@@ -1,0 +1,16 @@
+==== Build Options ====
+Version:        us
+Microcode:      f3dex2e
+Target:         sm64.us
+Compare ROM:    no
+Build Matching: no
+=======================
+Building tools...
+make[1]: Warning: File 'n64graphics' has modification time 13809 s in the future
+make[1]: warning:  Clock skew detected.  Your build may be incomplete.
+Building ROM...
+make: Warning: File 'include/model_ids.h' has modification time 13611 s in the future
+[0;32mCompiling: [0;33msrc/engine/behavior_script.c[0;32m -> [0;34mbuild/us_pc/src/engine/behavior_script.o[0m
+1gcc -c -O2 -D_LANGUAGE_C -Iinclude -Ibuild/us_pc -Ibuild/us_pc/include -Isrc -I. -DVERSION_US=1 -DF3DEX_GBI_2E=1 -DNON_MATCHING=1 -DAVOID_UB=1 -DTARGET_WINDOWS -DNO_SEGMENTED_MEMORY -DUSE_SYSTEM_MALLOC -DENABLE_DX11 -DWIDESCREEN -fno-strict-aliasing -fwrapv -march=native -o build/us_pc/src/engine/behavior_script.o src/engine/behavior_script.c
+make: 1gcc: No such file or directory
+make: *** [Makefile:839: build/us_pc/src/engine/behavior_script.o] Error 127

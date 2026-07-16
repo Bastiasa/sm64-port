@@ -18,6 +18,6 @@ void processCommand(CommandData *data) {
         return;
     }
 
-    ListenerEntry *listenerEntry = shget(listeners, data->command);
-    listenerEntry->value(data);
+    void (*listener)(CommandData *data) = shget(listeners, data->command);
+    listener(data);
 }

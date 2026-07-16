@@ -45,6 +45,20 @@ static void getMario_Forward(Vec3f out, f32 mult) {
 static char currentMessage[1024] = "";
 static int messageTime = MESSAGE_DURATION + 1;
 
+static u8 dialogBuffer[1024];
+
+#define HIDDEN_TEXT_Y_POSITION -30
+#define VISIBLE_TEXT_Y_POSITION 20
+
+#define TEXT_FRAME_1_X_POSITION 30
+#define TEXT_FRAME_2_X_POSITION 14
+
+static s16 textY = HIDDEN_TEXT_Y_POSITION;
+static s16 textYTarget = HIDDEN_TEXT_Y_POSITION;
+
+static s16 textX = TEXT_FRAME_2_X_POSITION;
+static s16 textXTarget = TEXT_FRAME_2_X_POSITION;
+
 void pushCommandMessage(char *text, char *username) {
     snprintf(
         currentMessage, 
@@ -53,8 +67,9 @@ void pushCommandMessage(char *text, char *username) {
         username ? username : "Desconocido"
     );
     messageTime = 0;
+    textXTarget = TEXT_FRAME_1_X_POSITION;
+    textX = TEXT_FRAME_2_X_POSITION;
 }
-
 
 void onExplosion(CommandData *data) {
     struct Object *explosion = spawn_object(
@@ -179,8 +194,6 @@ void onBurn(CommandData *data) {
     pushCommandMessage("%s te ha quemado el culo", data->username);
 }
 
-static u8 dialogBuffer[1024];
-
 void ascii_to_dialog_string(const char *src) {
     int i = 0;
 
@@ -192,17 +205,6 @@ void ascii_to_dialog_string(const char *src) {
     dialogBuffer[i] = DIALOG_CHAR_TERMINATOR;
 }
 
-#define HIDDEN_TEXT_Y_POSITION -30
-#define VISIBLE_TEXT_Y_POSITION 20
-
-#define TEXT_FRAME_1_X_POSITION 30
-#define TEXT_FRAME_2_X_POSITION 14
-
-static s16 textY = HIDDEN_TEXT_Y_POSITION;
-static s16 textYTarget = HIDDEN_TEXT_Y_POSITION;
-
-static s16 textX = TEXT_FRAME_2_X_POSITION;
-static s16 textXTarget = TEXT_FRAME_2_X_POSITION;
 
 f32 lerp(f32 value, f32 target, f32 weigth) {
     return value + (target - value) * weigth;
@@ -237,7 +239,7 @@ void renderTextBackground() {
     s16 sizeY = 20;
 
     s16 positionX = 0;
-    s16 positionY = SCREEN_HEIGHT - textVerticalPosition - sizeY;
+    s16 positionY = SCREEN_HEIGHT - textY - sizeY;
 
     gSPTextureRectangle(
         gDisplayListHead++,
@@ -269,7 +271,7 @@ static void renderText() {
 }
 
 
-void interactiveChatOnRendeHud() {
+void interactiveChatOnRenderHud() {
 
     if (gMarioObject == NULL)
     {
@@ -294,9 +296,9 @@ void interactiveChatOnRendeHud() {
 
     if (messageTime >= MESSAGE_DURATION)
     {
-        textTargetVerticalPosition = HIDDEN_TEXT_Y_POSITION;
+        textYTarget = HIDDEN_TEXT_Y_POSITION;
     } else {
-        textTargetVerticalPosition = VISIBLE_TEXT_Y_POSITION;
+        textYTarget = VISIBLE_TEXT_Y_POSITION;
         messageTime++;
     }
     
