@@ -214,7 +214,7 @@ f32 lerp(f32 value, f32 target, f32 weigth) {
     return value + (target - value) * weigth;
 }
 
-void render_text_background() {
+void renderTextBackground() {
 
     gDPSetCycleType(gDisplayListHead++, G_CYC_1CYCLE);
     gDPSetCombineMode(
@@ -260,7 +260,7 @@ void render_text_background() {
 
 }
 
-void render_text() {
+static void renderText() {
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
 
     ascii_to_dialog_string(currentMessage);
@@ -281,15 +281,15 @@ void render_text() {
 }
 
 
-void interactive_chat_on_render_hud() {
+void interactiveChatOnRendeHud() {
 
     if (gMarioObject == NULL)
     {
         return;
     }
 
-    render_text_background();
-    render_text();
+    renderTextBackground();
+    renderText();
 
     if (messageTime >= MESSAGE_DURATION)
     {
@@ -301,7 +301,7 @@ void interactive_chat_on_render_hud() {
     
 }
 
-void interactive_chat_on_frame() {
+void interactiveChatOnFrame() {
 
     if (nBowserToUpdate != NULL)
     {
@@ -324,19 +324,29 @@ void interactive_chat_on_frame() {
     
 }
 
-void run_interactive_chat(void) {
-    websocket_start_thread();
+static int interactiveChatRunning = 0;
 
-    register_listener("bexplosion", onExplosion);
-    register_listener("bbowser", onBowser);
-    register_listener("bmoneda", onCoin);
-    register_listener("b1up", on1Up);
+void runInteractiveChat(void) {
 
-    register_listener("bsaltar", onJump);
-    register_listener("bpegar", onPunch);
-    register_listener("bbonk", onBonk);
-    register_listener("bminibonk", onMiniBonk);
-    register_listener("bquemar", onBurn);
+    if (interactiveChatRunning)
+    {
+        return;
+    }
+
+    interactiveChatRunning = 1;
+
+    startWebsocketThread();
+
+    registerListener("bexplosion", onExplosion);
+    registerListener("bbowser", onBowser);
+    registerListener("bmoneda", onCoin);
+    registerListener("b1up", on1Up);
+
+    registerListener("bsaltar", onJump);
+    registerListener("bpegar", onPunch);
+    registerListener("bbonk", onBonk);
+    registerListener("bminibonk", onMiniBonk);
+    registerListener("bquemar", onBurn);
 }
 
 #endif

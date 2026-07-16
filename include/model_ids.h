@@ -26,6 +26,10 @@
 #define MODEL_MARIO                       0x01        // mario_geo
 #define MODEL_LUIGI                       0x02        // unused
 
+/* CUSTOM INTERACTIVE CHAT MODELS */
+
+#define MODEL_IC_BOWSER                   48
+
 /* Various static level geometry, the geo layout differs but terrain object presets treat them the same.*/
 
 #define MODEL_LEVEL_GEOMETRY_03                0x03
