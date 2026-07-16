@@ -2,6 +2,8 @@
 #include "stb_ds.h"
 #include "commands_listeners.h"
 
+#include "object_list_processor.h"
+
 #include <stdio.h>
 
 static ListenerEntry *listeners = NULL;
@@ -23,6 +25,13 @@ void processCommand(CommandData *data) {
         printf("[IC.COMMANDS_LISTENER]: COMMAND IS NOT REGISTERED.\n");
         return;
     }
+
+    if (gMarioObject == NULL)
+    {
+        printf("[IC.COMMANDS_LISTENER]: MARIO OBJECT IS NULL. NOT EXECUTED.\n");
+        return;
+    }
+    
 
     printf("[IC.COMMANDS_LISTENER]: COMMAND IS REGISTERED.");
     void (*listener)(CommandData *data) = shget(listeners, data->command);

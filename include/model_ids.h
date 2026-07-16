@@ -28,7 +28,7 @@
 
 /* CUSTOM INTERACTIVE CHAT MODELS */
 
-#define MODEL_IC_BOWSER                   48
+#define MODEL_IC_BOWSER                   50
 
 /* Various static level geometry, the geo layout differs but terrain object presets treat them the same.*/
 
