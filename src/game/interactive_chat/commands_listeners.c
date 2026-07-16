@@ -2,7 +2,7 @@
 #include "stb_ds.h"
 #include "commands_listeners.h"
 
-#include "object_list_processor.h"
+#include "src/game/object_list_processor.h"
 
 #include <stdio.h>
 

@@ -670,10 +670,15 @@ void setup_game_memory(void) {
 static struct LevelCommand *levelCommandAddr;
 #endif
 
+
+#include "game/interactive_chat/main.h"
+
+
 /**
  * Main game loop thread. Runs forever as long as the game continues.
  */
 void thread5_game_loop(UNUSED void *arg) {
+
 #ifdef TARGET_N64
     struct LevelCommand *levelCommandAddr;
 #endif
@@ -687,6 +692,8 @@ void thread5_game_loop(UNUSED void *arg) {
     create_thread_6();
 #endif
     save_file_load_all();
+
+    runInteractiveChat();
 
     set_vblank_handler(2, &gGameVblankHandler, &gGameVblankQueue, (OSMesg) 1);
 
@@ -704,7 +711,11 @@ void thread5_game_loop(UNUSED void *arg) {
     gGlobalTimer++;
 }
 
+
 void game_loop_one_iteration(void) {
+
+    interactiveChatOnFrame();
+
 #endif
         // If the reset timer is active, run the process to reset the game.
         if (gResetTimer) {

@@ -86,7 +86,7 @@ static struct lws_protocols protocols[] = {
 static void *websocketThread(void *arg)
 {
     while (gRunning) {
-        lws_service(gContext, 50);
+        lws_service(gContext, 0);
     }
 
     return NULL;
@@ -97,6 +97,8 @@ void websocketConnect(void)
     struct lws_client_connect_info ccinfo;
     memset(&ccinfo, 0, sizeof(ccinfo));
 
+    printf("[IC.WEBSOCKET]: TRYING TO CONNECT...");
+
     ccinfo.context = gContext;
     ccinfo.address = "127.0.0.1";
     ccinfo.port = 3000;
@@ -105,7 +107,8 @@ void websocketConnect(void)
     ccinfo.origin = ccinfo.address;
     ccinfo.protocol = protocols[0].name;
 
-    lws_client_connect_via_info(&ccinfo);
+    struct lws *client = lws_client_connect_via_info(&ccinfo);
+    printf("[IC.WEBSOCKET]: CONNECT RESULT %p\n", client);
 }
 
 void startWebsocketThread(void)
@@ -123,14 +126,15 @@ void startWebsocketThread(void)
         return;
     }
 
-    websocketConnect();
-
     pthread_create(
         &gWsThread,
         NULL,
         websocketThread,
         NULL
     );
+
+    websocketConnect();
+
 }
 
 #endif

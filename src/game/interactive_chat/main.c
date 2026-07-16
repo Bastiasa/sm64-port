@@ -113,7 +113,7 @@ void onBowser(CommandData *data){
     pBowserToUpdate = bowser;
 
     pushCommandMessage(
-        "%s te ha enviado un Bowser de regalito (%s)", 
+        "%s te ha enviado un Bowser de regalito", 
         data->username
     );
 
@@ -327,7 +327,7 @@ void interactiveChatOnFrame() {
     
 }
 
-static int interactiveChatRunning = 0;
+static u8 interactiveChatRunning = 0;
 
 void runInteractiveChat(void) {
 
@@ -340,10 +340,10 @@ void runInteractiveChat(void) {
 
     startWebsocketThread();
 
-    FILE *f = fopen("logs.txt", "w");
+    /*FILE *f = fopen("logs.txt", "w");
 
-    freopen("log.txt", "w", stdout);
-    freopen("log.txt", "w", stderr);
+    freopen("logs.txt", "w", stdout);
+    freopen("logs.txt", "w", stderr);*/
 
     registerListener("bexplosion", onExplosion);
     registerListener("bbowser", onBowser);

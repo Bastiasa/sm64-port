@@ -1130,12 +1130,8 @@ UNUSED static s32 play_mode_unused(void) {
     return 0;
 }
 
-#include "game/interactive_chat/main.h"
-
 s32 update_level(void) {
     s32 changeLevel;
-
-    interactiveChatOnFrame();
 
     switch (sCurrPlayMode) {
         case PLAY_MODE_NORMAL:
@@ -1165,8 +1161,6 @@ s32 update_level(void) {
 
 s32 init_level(void) {
     s32 val4 = 0;
-
-    runInteractiveChat();
     set_play_mode(PLAY_MODE_NORMAL);
 
     sDelayedWarpOp = WARP_OP_NONE;
