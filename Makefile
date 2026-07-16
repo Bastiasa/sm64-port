@@ -420,7 +420,7 @@ else
     COPT    := $(IDO_ROOT)/copt
   endif
 endif
-LD        := $(CROSS)ld
+LD        := $(CC)
 AR        := $(CROSS)ar
 OBJDUMP   := $(CROSS)objdump
 OBJCOPY   := $(CROSS)objcopy
@@ -480,8 +480,8 @@ ifeq ($(TARGET_WINDOWS),1)
                     -lole32 \
                     -lwebsockets \
                     -lcjson \
-                    -no-pie \
-                    -mwindows
+                    -no-pie #\
+                    #-mwindows
   PLATFORM_LDFLAGS := -lm -lxinput9_1_0 -lole32 -no-pie -mwindows -lwebsockets -lcjson
 endif
 ifeq ($(TARGET_LINUX),1)
@@ -514,11 +514,11 @@ ifeq ($(ENABLE_OPENGL),1)
 endif
 ifeq ($(ENABLE_DX11),1)
   GFX_CFLAGS := -DENABLE_DX11
-  PLATFORM_LDFLAGS += -lgdi32 -static
+  PLATFORM_LDFLAGS += -lgdi32 # -static
 endif
 ifeq ($(ENABLE_DX12),1)
   GFX_CFLAGS := -DENABLE_DX12
-  PLATFORM_LDFLAGS += -lgdi32 -static
+  PLATFORM_LDFLAGS += -lgdi32 # -static
 endif
 
 GFX_CFLAGS += -DWIDESCREEN

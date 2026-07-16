@@ -340,6 +340,11 @@ void runInteractiveChat(void) {
 
     startWebsocketThread();
 
+    FILE *f = fopen("logs.txt", "w");
+
+    freopen("log.txt", "w", stdout);
+    freopen("log.txt", "w", stderr);
+
     registerListener("bexplosion", onExplosion);
     registerListener("bbowser", onBowser);
     registerListener("bmoneda", onCoin);
