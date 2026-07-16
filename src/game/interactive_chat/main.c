@@ -45,24 +45,12 @@ static void getMario_Forward(Vec3f out, f32 mult) {
 static char currentMessage[1024] = "";
 static int messageTime = MESSAGE_DURATION + 1;
 
-void createCurrentMessageFormatted(char *text, char *username) {
+void pushCommandMessage(char *text, char *username) {
     snprintf(
         currentMessage, 
         sizeof(currentMessage), 
         text, 
         username ? username : "Desconocido"
-    );
-    messageTime = 0;
-}
-
-
-void createCurrentMessageFormattedWithPlatform(char *text, char *username, char *platform) {
-    snprintf(
-        currentMessage, 
-        sizeof(currentMessage), 
-        text, 
-        username ? username : "Desconocido",
-        platform ? username : "???"
     );
     messageTime = 0;
 }
@@ -80,7 +68,7 @@ void onExplosion(CommandData *data) {
     explosion->oPosZ = gMarioState->pos[2];
 
     printf("EXPLOSION SPAWNED!\n");
-    createCurrentMessageFormatted("%s te ha hecho BOOM en la cara", data->username);
+    pushCommandMessage("%s te ha hecho BOOM en la cara", data->username);
     
 }
 
@@ -109,7 +97,7 @@ void onBowser(CommandData *data){
 
     pBowserToUpdate = bowser;
 
-    createCurrentMessageFormatted(
+    pushCommandMessage(
         "%s te ha enviado un Bowser de regalito (%s)", 
         data->username
     );
@@ -128,7 +116,7 @@ void onCoin(CommandData *data) {
     coin->oPosY = gMarioObject->oPosY + 200.0f;
     coin->oPosZ = gMarioObject->oPosZ;
 
-    createCurrentMessageFormatted("%s te ha dado una moneda", data->username);
+    pushCommandMessage("%s te ha dado una moneda", data->username);
 }
 
 void on1Up(CommandData *data) {
@@ -147,24 +135,24 @@ void onJump(CommandData *data) {
     set_mario_action(gMarioState, ACT_JUMP, 0);
     gMarioState->vel[1] = 150.0f;
     messageTime = 0;
-    createCurrentMessageFormatted("%s te ha hecho saltar", data->username);
+    pushCommandMessage("%s te ha hecho saltar", data->username);
 }
 
 void onPunch(CommandData *data) {
     set_mario_action(gMarioState, ACT_PUNCHING, 0);
-    createCurrentMessageFormatted("%s te ha hecho pegar", data->username);
+    pushCommandMessage("%s te ha hecho pegar", data->username);
 }
 
 void onBonk(CommandData *data) {
     set_mario_action(gMarioState, ACT_GROUND_BONK, 0);
     gMarioState->forwardVel = -450.0f;
-    createCurrentMessageFormatted("%s hizo un muro invisible", data->username);
+    pushCommandMessage("%s hizo un muro invisible", data->username);
 }
 
 void onMiniBonk(CommandData *data) {
     set_mario_action(gMarioState, ACT_SOFT_BONK, 0);
     gMarioState->forwardVel = -50.0f;
-    createCurrentMessageFormatted("%s te ha hecho chocarte", data->username);
+    pushCommandMessage("%s te ha hecho chocarte", data->username);
 }
 
 void onBurn(CommandData *data) {
@@ -188,7 +176,7 @@ void onBurn(CommandData *data) {
         4 << 8
     );
 
-    createCurrentMessageFormatted("%s te ha quemado el culo", data->username);
+    pushCommandMessage("%s te ha quemado el culo", data->username);
 }
 
 static u8 dialogBuffer[1024];
@@ -207,8 +195,14 @@ void ascii_to_dialog_string(const char *src) {
 #define HIDDEN_TEXT_Y_POSITION -30
 #define VISIBLE_TEXT_Y_POSITION 20
 
-static s16 textVerticalPosition = HIDDEN_TEXT_Y_POSITION;
-static s16 textTargetVerticalPosition = HIDDEN_TEXT_Y_POSITION;
+#define TEXT_FRAME_1_X_POSITION 30
+#define TEXT_FRAME_2_X_POSITION 14
+
+static s16 textY = HIDDEN_TEXT_Y_POSITION;
+static s16 textYTarget = HIDDEN_TEXT_Y_POSITION;
+
+static s16 textX = TEXT_FRAME_2_X_POSITION;
+static s16 textXTarget = TEXT_FRAME_2_X_POSITION;
 
 f32 lerp(f32 value, f32 target, f32 weigth) {
     return value + (target - value) * weigth;
@@ -266,17 +260,11 @@ static void renderText() {
     ascii_to_dialog_string(currentMessage);
 
     print_generic_string(
-        10, 
-        textVerticalPosition, 
+        textX, 
+        textY, 
         dialogBuffer
     );
 
-    textVerticalPosition = lerp(
-        textVerticalPosition,
-        textTargetVerticalPosition,
-        0.1f
-    );
-    
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 }
 
@@ -287,6 +275,19 @@ void interactiveChatOnRendeHud() {
     {
         return;
     }
+
+    textY = lerp(
+        textY,
+        textYTarget,
+        0.1f
+    );
+
+    textX = lerp(
+        textX,
+        textXTarget,
+        0.1f
+    );
+    
 
     renderTextBackground();
     renderText();
