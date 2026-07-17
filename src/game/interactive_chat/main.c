@@ -345,16 +345,16 @@ void runInteractiveChat(void) {
     freopen("logs.txt", "w", stdout);
     freopen("logs.txt", "w", stderr);*/
 
-    registerListener("bexplosion", onExplosion);
-    registerListener("bbowser", onBowser);
-    registerListener("bmoneda", onCoin);
-    registerListener("b1up", on1Up);
+    registerListener("!explosion", onExplosion);
+    registerListener("!bowser", onBowser);
+    registerListener("!moneda", onCoin);
+    registerListener("!1up", on1Up);
 
-    registerListener("bsaltar", onJump);
-    registerListener("bpegar", onPunch);
-    registerListener("bbonk", onBonk);
-    registerListener("bminibonk", onMiniBonk);
-    registerListener("bquemar", onBurn);
+    registerListener("!quemar", onBurn);
+    registerListener("!saltar", onJump);
+    registerListener("!pegar", onPunch);
+    registerListener("!bonk", onBonk);
+    registerListener("!minibonk", onMiniBonk);
 }
 
 #endif
